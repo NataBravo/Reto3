@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LibraryService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">library_managment</a> &gt; <a href="index.source.html" class="el_package">com.devsenior.nata</a> &gt; <span class="el_source">LibraryService.java</span></div><h1>LibraryService.java</h1><pre class="source lang-java linenums">package com.devsenior.nata;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+public class LibraryService {
+    private BookRepository bookRepository;
+    private LoanRepository loanRepository;
+    private List&lt;User&gt; users;
+    private List&lt;Loan&gt; loans;
+
+<span class="fc" id="L13">    public LibraryService(BookRepository bookRepository, LoanRepository loanRepository) {</span>
+<span class="fc" id="L14">        this.bookRepository = bookRepository;</span>
+<span class="fc" id="L15">        this.loanRepository = loanRepository;</span>
+<span class="fc" id="L16">        this.users = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L17">        this.loans = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L19">    }</span>
+
+    public void addLoanBook(User user, Book book) throws NotFoundException {
+
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (book.isLoaned()) {</span>
+<span class="fc" id="L24">            throw new NotFoundException(&quot;El libro ya esta prestado&quot;);</span>
+        }
+<span class="fc" id="L26">        book.loanBook();</span>
+<span class="fc" id="L27">        Loan loan = new Loan(user, book, LocalDate.now());</span>
+<span class="fc" id="L28">        loanRepository.save(loan);</span>
+
+<span class="fc" id="L30">    }</span>
+
+    public void returnBook(Book book) throws NotFoundException {
+
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (!book.isLoaned()) {</span>
+<span class="fc" id="L35">            throw new NotFoundException(&quot;El libro no esta prestado&quot;);</span>
+        }
+<span class="fc" id="L37">        book.returnBook();</span>
+<span class="fc" id="L38">    }</span>
+
+    public void addBook(Book book) {
+<span class="fc" id="L41">        bookRepository.save(book);</span>
+
+<span class="fc" id="L43">    }</span>
+
+    public Book getBookById(String id) {
+<span class="fc" id="L46">        return bookRepository.findById(id);</span>
+    }
+
+    public void addUsers(String name, String id) {
+<span class="fc" id="L50">        users.add(new User(name, id));</span>
+<span class="fc" id="L51">    }</span>
+
+    public List&lt;Loan&gt; getLoansByUserId(String userId) throws NotFoundException {
+<span class="fc" id="L54">        loans = loanRepository.findLoanByUserId(userId);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        for (Loan loan : loans) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (loan.getUser().getId().equals(userId)) {</span>
+<span class="fc" id="L57">                return loans;</span>
+            }
+        }
+<span class="fc" id="L60">        throw new NotFoundException(&quot;El usuario no tiene prestados libros&quot;);</span>
+    }
+
+    public User getUsersById(String id) throws NotFoundException {
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (User user : users) {</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            if (user.getId().equals(id)) {</span>
+<span class="fc" id="L66">                return user;</span>
+            }
+        }
+<span class="fc" id="L69">        throw new NotFoundException(&quot;El usuario no existe&quot;);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

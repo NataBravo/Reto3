@@ -58,7 +58,6 @@ public class LibraryService {
     }
 
     public List<Loan> getLoansByUserId(String userId) throws NotFoundException {
-        loans = loanRepository.findLoanByUserId(userId);
         for (Loan loan : loans) {
             if (loan.getUser().getId().equals(userId)) {
                 return loans;

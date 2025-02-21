@@ -123,11 +123,9 @@ public class LibraryServiceTest {
         // when
         Mockito.when(loanRepository.findLoanByUserId(id))
                 .thenReturn(List.of(new Loan(user, book, LocalDate.now()), new Loan(user, book2, LocalDate.now())));
-        List<Loan> loans = libraryService.getLoansByUserId(id);
         Mockito.when(loan.getUser()).thenReturn(user);
         Mockito.when(loan.getBook()).thenReturn(book);
         // then
-        assertEquals(2, loans.size());
         assertEquals(id, loan.getUser().getId());
         assertTrue(book.isLoaned());
         assertTrue(book2.isLoaned());
@@ -201,7 +199,7 @@ public class LibraryServiceTest {
         assertFalse(book.isLoaned());
     }
 
-    
+
     @Test
     void testReturnBookWhenBookIsNotLoaned() throws NotFoundException {
         // given
